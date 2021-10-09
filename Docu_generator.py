@@ -62,10 +62,15 @@ cell.text = "0,1" # 해당 셀에 "0,1"값 대입
 table.rows[1].cells[0].text = "1,0" # 1번째 행, 0번째 열에 "1,0"대입 
 table.columns[2].cells[0].text = "0,2" # 0번째 행, 2번째 열에 "0,2"대입 
 row = table.add_row() # 표에 행 추가 
+#row.height = Inches(2.0)
 row.cells[1].text = "2,1" # 추가된 행의 1번째 열에 "2,1"대입
 row.cells[2].text = 'TEST'
-row.cells[2].italic=True
 
+para=row.cells[2].add_paragraph()
+run = para.add_run('test first')
+#table.style.font.name="Times New Roman"
+
+row.table.style.font.name="Times New Roman"
 
 # # 문서 내 모든 표의 모든 셀을 출력 
 # for table in document.tables:
@@ -77,7 +82,24 @@ row.cells[2].italic=True
 # for p in document.paragraphs:
 #     print(p.text)
 
-
-
 document.save("test.docx")
 
+from docx2pdf import convert
+convert("test.docx", "test3.pdf")
+
+
+import sys
+import os
+import comtypes.client
+
+wdFormatPDF = 17
+
+in_file = "test.docx"
+out_file = "test.pdf"
+
+
+word = comtypes.client.CreateObject('Word.Application')
+doc = word.Documents.Open(in_file)
+doc.SaveAs(out_file, FileFormat=wdFormatPDF)
+doc.Close()
+word.Quit()
